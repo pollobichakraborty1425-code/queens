@@ -1,0 +1,73 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <chrono>
+
+using namespace std;
+
+int N;
+vector<int> board;
+
+bool safe(int row, int col) {
+    for (int i = 0; i < row; i++) {
+
+        if (board[i] == col)
+            return false;
+
+        if (abs(board[i] - col) == abs(i - row))
+            return false;
+    }
+    return true;
+}
+
+bool solve(int row) {
+    if (row == N)
+        return true;
+
+    for (int col = 0; col < N; col++) {
+        if (safe(row, col)) {
+            board[row] = col;
+            if (solve(row + 1))
+                return true;
+            board[row] = -
+        }
+    }
+    return false;
+}
+
+void printBoard() {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            cout << (board[i] == j ? "Q " : ". ");
+        }
+        cout << endl;
+    }
+}
+
+int main() {
+    cout << "Enter N: ";
+    cin >> N;
+
+    board.assign(N, -1);
+
+
+    auto start = chrono::high_resolution_clock::now();
+
+    bool found = solve(0);
+
+
+    auto end = chrono::high_resolution_clock::now();
+
+    auto duration = chrono::duration_cast<chrono::microseconds>(end - start).count();
+
+    if (found) {
+        cout << "\nSolution exists:" << endl;
+        printBoard();
+    } else {
+        cout << "\nNo solution exists." << endl;
+    }
+
+    cout << "Execution Time: " << duration << " microseconds" << endl;
+
+    return 0;
+}
